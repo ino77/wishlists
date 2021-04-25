@@ -38,7 +38,7 @@ wikipedia.set_lang("ru")
 # устанавливаем русский язык для апи википедии
 f = open('ids.txt', 'r+')
 c = f.readlines()
-token = "ecbde2a84cae25f0504f3ae8454220b8fdc91eaab9f3873118afc2195310bcd693dc667c1882240b988c6"
+token = "YOUR_TOKEN"
 # здесь неоходимо задать уникальный токен группы вк
 vk = vk_api.VkApi(token=token)
 vk._auth_token()
