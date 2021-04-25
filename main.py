@@ -6,6 +6,7 @@ import sqlite3
 import time
 import threading
 import wikipedia
+from facts import facts
 
 
 def rung(s):
@@ -41,12 +42,14 @@ token = "ecbde2a84cae25f0504f3ae8454220b8fdc91eaab9f3873118afc2195310bcd693dc667
 # здесь неоходимо задать уникальный токен группы вк
 vk = vk_api.VkApi(token=token)
 vk._auth_token()
+testing_count = 0
 conn = sqlite3.connect('fdb.db')
 # подключаемся к базе данных с клиентами и фильмами
 cur = conn.cursor()
 while True:
+    testing_count += 1
     # основной функциональный код бота
-    print('Бот запущен')
+    print(testing_count)
     messages = vk.method("messages.getConversations", {"offset": 0, "count": 20, "filter": "unanswered"})
     if messages["count"] >= 1:
         id = messages["items"][0]["last_message"]["from_id"]
@@ -183,7 +186,7 @@ while True:
                 win = 1
             elif player == 3 and comp == 2:
                 win = 2
-            elif win == 0:
+            if win == 0:
                 vk.method("messages.send", {"peer_id": id, "message": "Ничья!",
                                             "random_id": random.randint(1, 2147483647)})
             elif win == 1:
@@ -192,6 +195,10 @@ while True:
             elif win == 2:
                 vk.method("messages.send", {"peer_id": id, "message": "Победил компьютер!",
                                             "random_id": random.randint(1, 2147483647)})
+        elif '/факт' in body.lower():
+            vk.method("messages.send", {"peer_id": id, "message": f"{random.choice(facts)}",
+                                        "random_id": random.randint(1, 2147483647)})
         else:
+            print(body)
             vk.method("messages.send", {"peer_id": id, "message": 'Видимо я чего то не понимаю',
                                         "random_id": random.randint(1, 2147483647)})
